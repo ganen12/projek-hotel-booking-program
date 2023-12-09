@@ -36,7 +36,7 @@ struct Reservation {
 
 Reservation room[numFloors][numRoomsPerFloor]; // mendeklarasi array dua dimensi yang terdiri dari 3 baris (lantai) dan 10 kolom (kamar) 
 
-Reservation reservation; // mendeklarasi nama struct, dengan menggunakan template Reservation
+Reservation reservation; // mendeklarasi nama struct, dengan template Reservation
 
 int main() {
 
@@ -118,6 +118,7 @@ int main() {
                 system("cls");
                 cancelReservation();
                 system("pause");
+
                 break;
 
             default:
@@ -135,7 +136,9 @@ int main() {
 
 void displayMainMenu() {
     system("cls");
-    cout << "Selamat Datang di Hotel Amikom\n";
+    cout << "==========================================\n";
+    cout << " >>>  SELAMAT DATANG DI HOTEL AMIKOM  <<<\n";
+    cout << "==========================================\n";
     cout << "\n  1. Pesan kamar\n";
     cout << "\n  2. Lihat Riwayat Pesanan Kamar\n";
     cout << "\n  3. Lihat Kamar yang Tersedia\n";
