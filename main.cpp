@@ -2,6 +2,7 @@
 #include <string>
 #include <array>
 #include <iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -147,34 +148,66 @@ void displayMainMenu() {
 }
 
 void getInformation() {
+    cout << " --- PESAN KAMAR --- \n\n";
+    
     cout << "Enter your name:\n-> ";
-    cin.ignore();
+    cin.ignore(); // untuk menghapus buffer input
     getline(cin, reservation.name);
 
     cout << "\nEnter your contact information:\n-> ";
     getline(cin, reservation.contact);
 
-    cout << "\nEnter duration of stay (in nights):\n-> ";
-    cin >> reservation.duration;
-
-    cout << "\nEnter the number of guests:\n-> ";
-    cin >> reservation.numGuests;
-
-    cout << "\nEnter room type: \n1. (Single), \n2. (Double), \n3. (Deluxe)\n-> ";
-    cin >> reservation.roomType;
-
-    switch (reservation.roomType) {
-        case 1:
-            reservation.totalPrice = 500000 * reservation.duration;
-            break;
-        case 2:
-            reservation.totalPrice = 700000 * reservation.duration;
-            break;
-        case 3:
-            reservation.totalPrice = 1000000 * reservation.duration;
-            break;
+    // Validasi input durasi
+    while (true) {
+        cout << "\nEnter duration of stay (in nights):\n-> ";
+        if (cin >> reservation.duration && reservation.duration > 0) {
+            break; // Valid input, exit the loop
+        }
+        else {
+            cout << "Input tidak valid. Masukkan bilangan integer positif!\n";
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
     }
 
+    // Validasi input numGuests
+    while (true) {
+        cout << "\nEnter the number of guests:\n-> ";
+        if (cin >> reservation.numGuests && reservation.numGuests > 0) {
+            break; // Valid input, exit the loop
+        }
+        else {
+            cout << "Invalid input. Please enter a positive integer.\n";
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
+    }
+
+    // Validasi input roomType
+    while (true) {
+        cout << "\nEnter room type (1. Single, 2. Double, 3. Deluxe):\n-> ";
+        if (cin >> reservation.roomType && reservation.roomType >= 1 && reservation.roomType <= 3) {
+            break; // Valid input, exit the loop
+        }
+        else {
+            cout << "Invalid input. Please enter a number between 1 and 3.\n";
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
+    }
+
+    // kalkulasi harga berdasarkan jenis kamar dan durasi menginap
+    switch (reservation.roomType) {
+        case 1:
+            reservation.totalPrice = 500000 * reservation.numGuests * reservation.duration;
+            break;
+        case 2:
+            reservation.totalPrice = 700000 * reservation.numGuests * reservation.duration;
+            break;
+        case 3:
+            reservation.totalPrice = 1000000 * reservation.numGuests * reservation.duration;
+            break;
+    }
 }
 
 void displayResHistory() {
@@ -246,13 +279,13 @@ void cancelReservation() {
 
     // Validasi input
     if (floor < 1 || floor > numFloors || roomNumber < 1 || roomNumber > numRoomsPerFloor) {
-        cout << "Invalid floor or room number. Please try again.\n";
+        cout << "\nInvalid floor or room number. Please try again.\n";
         return;
     }
 
     // Validasi keberadaan reservasi
     if (room[floor - 1][roomNumber - 1].available) {
-        cout << "No reservation found for the specified room. Please try again.\n";
+        cout << "\nNo reservation found for the specified room. Please try again.\n";
         return;
     }
 
