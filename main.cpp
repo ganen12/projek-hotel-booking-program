@@ -148,13 +148,13 @@ void displayMainMenu() {
 }
 
 void getInformation() {
-    cout << " --- PESAN KAMAR --- \n\n";
+    cout << "\n --- PESAN KAMAR --- \n\n";
     
     cout << "Enter your name:\n-> ";
     cin.ignore(); // untuk menghapus buffer input
     getline(cin, reservation.name);
 
-    cout << "\nEnter your contact information:\n-> ";
+    cout << "\nEnter your email or contact information:\n-> ";
     getline(cin, reservation.contact);
 
     // Validasi input durasi
@@ -214,7 +214,7 @@ void displayResHistory() {
 
     int reservationCount = 0;
 
-    cout << "\nRIWAYAT RESERVASI ANDA:\n\n";
+    cout << "\n --- RIWAYAT RESERVASI ANDA ---\n\n";
 
     for (int a = 0; a < numFloors; ++a) {
         for (int b = 0; b < numRoomsPerFloor; ++b) {
@@ -243,7 +243,7 @@ void displayResHistory() {
 
 
 void displayAvailable() {
-    cout << "\nKAMAR YANG TERSEDIA (DITANDAI KOSONG):\n\n";
+    cout << "\n --- KAMAR YANG TERSEDIA (DITANDAI KOSONG) ---\n\n";
 
     for (int a = 0; a < numFloors; a++) {
         // Menampilkan nomor kamar untuk setiap lantai a
@@ -271,26 +271,47 @@ void displayAvailable() {
 void cancelReservation() {
     int floor, roomNumber;
 
-    cout << "Enter the floor number of the reservation to cancel: ";
-    cin >> floor;
+    cout << "\n --- BATALKAN RESERVASI ---\n\n";
+    
 
-    cout << "Enter the room number of the reservation to cancel: ";
-    cin >> roomNumber;
-
-    // Validasi input
-    if (floor < 1 || floor > numFloors || roomNumber < 1 || roomNumber > numRoomsPerFloor) {
-        cout << "\nInvalid floor or room number. Please try again.\n";
-        return;
+    while (true) {
+        cout << "Enter the floor number of the reservation to cancel:\n-> ";
+        if (cin >> floor && floor >= 1 && floor <= 3) {
+            break;
+        }
+        else {
+            cout << "Invalid input. Please enter floor number between 1 and 3!\n\n";
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
+    }
+    
+    while (true) {
+        cout << "\nEnter the room number of the reservation to cancel:\n-> ";
+        if (cin >> roomNumber && roomNumber >= 1 && roomNumber <= 10) {
+            break;
+        }
+        else {
+            cout << "Invalid input. Please enter room number between 1 and 10!\n";
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
     }
 
     // Validasi keberadaan reservasi
     if (room[floor - 1][roomNumber - 1].available) {
-        cout << "\nNo reservation found for the specified room. Please try again.\n";
+        cout << "\nNo reservation found for room " << floor << 0 << roomNumber << ". Please try again.\n";
         return;
     }
-
-    // Tandai kamar yang di batalkan menjadi tersedia
+    
+    // Reset informasi kamar
     room[floor - 1][roomNumber - 1].available = true;
+    room[floor - 1][roomNumber - 1].name = "";
+    room[floor - 1][roomNumber - 1].contact = "";
+    room[floor - 1][roomNumber - 1].duration = 0;
+    room[floor - 1][roomNumber - 1].numGuests = 0;
+    room[floor - 1][roomNumber - 1].totalPrice = 0;
+
 
     cout << "Reservation canceled successfully for room " << floor << 0 << roomNumber << ".\n";
 }
